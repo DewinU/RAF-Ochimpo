@@ -1,0 +1,10 @@
+C:\Users\DewinU\Desktop\RAF-Ochimpo\bin\Debug\RAF-Ochimpo.exe.config
+C:\Users\DewinU\Desktop\RAF-Ochimpo\bin\Debug\RAF-Ochimpo.exe
+C:\Users\DewinU\Desktop\RAF-Ochimpo\bin\Debug\RAF-Ochimpo.pdb
+C:\Users\DewinU\Desktop\RAF-Ochimpo\obj\Debug\RAF-Ochimpo.csprojAssemblyReference.cache
+C:\Users\DewinU\Desktop\RAF-Ochimpo\obj\Debug\RAF_Ochimpo.Form1.resources
+C:\Users\DewinU\Desktop\RAF-Ochimpo\obj\Debug\RAF_Ochimpo.Properties.Resources.resources
+C:\Users\DewinU\Desktop\RAF-Ochimpo\obj\Debug\RAF-Ochimpo.csproj.GenerateResource.cache
+C:\Users\DewinU\Desktop\RAF-Ochimpo\obj\Debug\RAF-Ochimpo.csproj.CoreCompileInputs.cache
+C:\Users\DewinU\Desktop\RAF-Ochimpo\obj\Debug\RAF-Ochimpo.exe
+C:\Users\DewinU\Desktop\RAF-Ochimpo\obj\Debug\RAF-Ochimpo.pdb
