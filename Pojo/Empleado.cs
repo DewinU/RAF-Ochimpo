@@ -21,14 +21,23 @@ namespace RAF_Ochimpo.Pojo
         {
         }
 
+        public Empleado(string cod, string firstName, string lastName, string hireDate, float salary)
+        {
+            Cod = cod;
+            FirstName = firstName;
+            LastName = lastName;
+            HireDate = hireDate;
+            Salary = salary;
+        }
+
         public Empleado(int id, string cod, string firstName, string lastName, string hireDate, float salary)
         {
-            this.Id = id;
-            this.Cod = cod;
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.HireDate = hireDate;
-            this.Salary = salary;
+            Id = id;
+            Cod = cod;
+            FirstName = firstName;
+            LastName = lastName;
+            HireDate = hireDate;
+            Salary = salary;
         }
 
         public override string ToString()

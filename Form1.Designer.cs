@@ -85,7 +85,10 @@
             // 
             // tableView
             // 
-            this.tableView.AllowUserToOrderColumns = true;
+            this.tableView.AllowUserToAddRows = false;
+            this.tableView.AllowUserToDeleteRows = false;
+            this.tableView.AllowUserToResizeColumns = false;
+            this.tableView.AllowUserToResizeRows = false;
             this.tableView.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableView.BackgroundColor = System.Drawing.SystemColors.ActiveCaption;
             this.tableView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -98,8 +101,11 @@
             this.tableView.GridColor = System.Drawing.SystemColors.ButtonShadow;
             this.tableView.Location = new System.Drawing.Point(31, 104);
             this.tableView.Name = "tableView";
+            this.tableView.ReadOnly = true;
+            this.tableView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tableView.Size = new System.Drawing.Size(698, 236);
             this.tableView.TabIndex = 4;
+            this.tableView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellClick);
             // 
             // column_ID
             // 

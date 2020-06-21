@@ -15,16 +15,12 @@ namespace RAF_Ochimpo.Imp
     {
         private BinaryWriter bwData;
         private BinaryWriter bwHeader;
-        private BinaryWriter bwTemp;
         private BinaryReader brData;
         private BinaryReader brHeader;
-        private BinaryReader brTemp;
         private FileStream fData;
         private FileStream fHeader;
-        private FileStream fTemp;
         private const string FILENAME_HEADER = "header.dat";
         private const string FILENAME_DATA = "data.dat";
-        private const string TEMP_HEADER = "temp.dat";
         private const int SIZE = 268;
 
         private void Open()
@@ -58,10 +54,6 @@ namespace RAF_Ochimpo.Imp
                 brHeader.Close();
             }
 
-            if (brTemp != null)
-            {
-                brTemp.Close();
-            }
             
             if (brData != null)
             {
@@ -73,10 +65,6 @@ namespace RAF_Ochimpo.Imp
                 bwHeader.Close();
             }
 
-            if (bwTemp != null)
-            {
-                bwTemp.Close();
-            }
 
             if (bwData != null)
             {
@@ -92,11 +80,6 @@ namespace RAF_Ochimpo.Imp
             {
                 fData.Close();
             }
-
-            if(fTemp != null)
-            {
-                fTemp.Close();
-            }
         }
 
         public List<Empleado> showAll()
@@ -110,19 +93,24 @@ namespace RAF_Ochimpo.Imp
                 long posHeader = 8 + i * 4;
                 brHeader.BaseStream.Seek(posHeader, SeekOrigin.Begin);
                 int k = brHeader.ReadInt32();
-                long posData = (k - 1) * SIZE;
-                brData.BaseStream.Seek(posData, SeekOrigin.Begin);
-                Empleado e = new Empleado()
+                if(k != 0)
                 {
-                    Id = brData.ReadInt32(),
-                    Cod = brData.ReadString(),
-                    FirstName = brData.ReadString(),
-                    LastName = brData.ReadString(),
-                    HireDate = brData.ReadString(),
-                    Salary = brData.ReadSingle()
-                };
+                    long posData = (k - 1) * SIZE;
+                    brData.BaseStream.Seek(posData, SeekOrigin.Begin);
+                    Empleado e = new Empleado()
+                    {
+                        Id = brData.ReadInt32(),
+                        Cod = brData.ReadString(),
+                        FirstName = brData.ReadString(),
+                        LastName = brData.ReadString(),
+                        HireDate = brData.ReadString(),
+                        Salary = brData.ReadSingle()
+                    };
+
+                    empleados.Add(e);
+                    continue;
+                }
                 
-                empleados.Add(e);
             }
             Close();
             return empleados;
@@ -165,57 +153,68 @@ namespace RAF_Ochimpo.Imp
             {
                 return;
             }
-
                             
-            long headerPos = 8 + t.Id * 4;  //(t.id - 1)¿?
-            brHeader.BaseStream.Seek(headerPos, SeekOrigin.Current);
+            long headerPos = 8 + (t.Id - 1) * 4;
+            brHeader.BaseStream.Seek(headerPos, SeekOrigin.Begin);
             int k = brHeader.ReadInt32();
 
             long dataPos = (k - 1) * SIZE;
             bwData.BaseStream.Seek(dataPos, SeekOrigin.Begin);
-
-            bwData.Write(k); //Write(k) ¿?
+            bwData.Write(k);
             bwData.Write(t.Cod);
             bwData.Write(t.FirstName);
             bwData.Write(t.LastName);
             bwData.Write(t.HireDate);
             bwData.Write(t.Salary);
-
             Close();
         }
 
         public void deleteEmpleado(Empleado t)
         {
-            fTemp = new FileStream(TEMP_HEADER,
-                FileMode.CreateNew, FileAccess.ReadWrite);
-            brTemp = new BinaryReader(fTemp);
-            bwTemp = new BinaryWriter(fTemp);
-            bwTemp.BaseStream.Seek(0, SeekOrigin.Begin);
-            bwTemp.Write(0);
-            bwTemp.Write(0);
-            bwTemp.BaseStream.Seek(0, SeekOrigin.Current);
-            int n = brTemp.ReadInt32();
+            Open();
+            brHeader.BaseStream.Seek(0, SeekOrigin.Begin);
+            int n = brHeader.ReadInt32();
 
-            List<Empleado> empleados = showAll();
-            foreach(var e in empleados.Skip(t.Id))
+            for (int i = 0; i < n; i++)
             {
-                bwTemp.BaseStream.Seek(0, SeekOrigin.Begin);
-                bwTemp.Write(++n);
-                bwTemp.Write(e.Id);
-
-                long posHeader = 8 + (n - 1) * 4;
-                bwTemp.BaseStream.Seek(posHeader, SeekOrigin.Begin);
-                bwTemp.Write(e.Id);
+                if (i == t.Id - 1)
+                {
+                    long posHeader = 8 + i * 4;
+                    bwHeader.BaseStream.Seek(posHeader, SeekOrigin.Begin);
+                    bwHeader.Write(0);
+                    break;
+                }
             }
             Close();
-            File.Delete(FILENAME_HEADER);
-            File.Move(TEMP_HEADER, FILENAME_HEADER);
         }
 
         
         public Empleado FindById(int id)
         {
-            throw new NotImplementedException();
+            Open();
+            Empleado e = null;
+            brHeader.BaseStream.Seek(0, SeekOrigin.Begin);
+            int n = brHeader.ReadInt32();
+
+            if (id <= 0 ||  id > n)
+            {
+                return e;
+            }
+
+            long dpos = (id - 1) * SIZE;
+            brData.BaseStream.Seek(dpos, SeekOrigin.Begin);
+            e = new Empleado()
+            {
+                Id = brData.ReadInt32(),
+                Cod = brData.ReadString(),
+                FirstName = brData.ReadString(),
+                LastName = brData.ReadString(),
+                HireDate = brData.ReadString(),
+                Salary = brData.ReadSingle()
+            };
+            Close();
+            return e;
+
         }
 
         public List<Empleado> FindByNombre(string nombre)

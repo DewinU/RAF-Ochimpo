@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Dao\DaoModel.cs" />
     <Compile Include="Dao\EmpleadoDao.cs" />
+    <Compile Include="Dao\Finder.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

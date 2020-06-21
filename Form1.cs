@@ -30,12 +30,12 @@ namespace RAF_Ochimpo
             foreach(var e in empleados)
             {
                 tableView.Rows.Add();
-                tableView.Rows[i].Cells[1].Value = e.Id;
+                tableView.Rows[i].Cells[0].Value = e.Id;
                 tableView.Rows[i].Cells[1].Value = e.Cod;
-                tableView.Rows[i].Cells[1].Value = e.FirstName;
-                tableView.Rows[i].Cells[2].Value = e.LastName;
-                tableView.Rows[i].Cells[1].Value = e.HireDate;
-                tableView.Rows[i].Cells[1].Value = e.Salary;
+                tableView.Rows[i].Cells[2].Value = e.FirstName;
+                tableView.Rows[i].Cells[3].Value = e.LastName;
+                tableView.Rows[i].Cells[4].Value = e.HireDate;
+                tableView.Rows[i].Cells[5].Value = e.Salary;
                 i++;
             }
         }
@@ -57,24 +57,18 @@ namespace RAF_Ochimpo
 
         private void editButton_Click(object sender, EventArgs e)
         {
-            Empleado emp = new Empleado
-            {
-                Id = 2,
-                Cod = "56",
-                FirstName = "Gustavo",
-                LastName = "Leyton",
-                HireDate = "2030",
-                Salary = 2000.00f
-            };
-            iDao.addEmpleado(emp);
+            int Index = tableView.CurrentRow.Index;
+            int id = Convert.ToInt32(tableView.Rows[Index].Cells[0].Value);
+            Empleado empleado = iDao.FindById(id);
+            empleado.LastName = "EDITADO";
+            iDao.updateEmpleado(empleado);
             RefreshTable();
         }
 
         private void reportButton_Click(object sender, EventArgs e)
         {
             Empleado emp = new Empleado
-            {
-                Id = 3,
+            { 
                 Cod = "464",
                 FirstName = "Test",
                 LastName = "Admin",
@@ -87,11 +81,26 @@ namespace RAF_Ochimpo
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            List<Empleado> empleados = iDao.showAll();
-            string emp = empleados.ElementAt(1).ToString();
+            int Index = tableView.CurrentRow.Index;
+            int id = Convert.ToInt32(tableView.Rows[Index].Cells[0].Value);
+            Empleado empleado = iDao.FindById(id);
+            iDao.deleteEmpleado(empleado);
+            RefreshTable();
+        }
 
-            label1.Text = emp;
-           
+
+        private void CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int id = Convert.ToInt32(tableView.CurrentRow.Cells[0].Value);
+            Empleado empleado = iDao.FindById(id);
+            if(empleado != null){
+                label1.Text = empleado.ToString();
+            }
+            else
+            {
+                label1.Text = "Es Nulo";
+            }
+            
         }
     }
 }
